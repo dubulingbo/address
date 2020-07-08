@@ -6,5 +6,5 @@
 2. **联系组管理**
 
 ## 运行结果
-![image text](/data/img/logo.png)
+![image text](/data/images/001.jpg)
 
