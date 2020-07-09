@@ -2,7 +2,7 @@ package addressbook.frame.person;
 
 
 import addressbook.entity.ContactPerson;
-import addressbook.frame.AllCPersonPanel;
+import addressbook.frame.CPersonMainPanel;
 import addressbook.util.Constant;
 import com.dublbo.jpSwing.JpButton;
 import com.dublbo.jpSwing.JpPanel;
@@ -30,7 +30,7 @@ public class CPersonInfoPopupPanel extends JpPopupPanel {
     public JpButton upAvatorBtn = new JpButton("修改头像");
     public JpImageView imageView = new JpImageView();  // 头像显示区
 
-    public AllCPersonPanel ui; // 主窗口
+    public CPersonMainPanel ui; // 主窗口
     public ContactPerson oldPerson;    // 未修改之前的联系人对象
     public int selectedRow; // 选中的行的行号
 
@@ -39,7 +39,7 @@ public class CPersonInfoPopupPanel extends JpPopupPanel {
 
     // owner: 主窗口
     // initValue: 关联的 Book对象
-    public CPersonInfoPopupPanel(AllCPersonPanel ui, ContactPerson initValue, int row, int x, int y) {
+    public CPersonInfoPopupPanel(CPersonMainPanel ui, ContactPerson initValue, int row, int x, int y) {
         this.ui = ui;
         this.oldPerson = initValue;
         this.selectedRow = row;

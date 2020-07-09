@@ -1,6 +1,6 @@
 package addressbook.frame.person;
 
-import addressbook.frame.AllCPersonPanel;
+import addressbook.frame.CPersonMainPanel;
 import addressbook.util.FileOperation;
 import com.dublbo.jpSwing.JpToaster;
 import com.dublbo.jpSwing.thread.JpShortTask;
@@ -8,10 +8,10 @@ import com.dublbo.jpSwing.thread.JpShortTask;
 import java.util.List;
 
 public class CopyToGroupTask extends JpShortTask {
-    AllCPersonPanel ui;
+    CPersonMainPanel ui;
 
 
-    public CopyToGroupTask(AllCPersonPanel ui) {
+    public CopyToGroupTask(CPersonMainPanel ui) {
         this.ui = ui;
     }
 

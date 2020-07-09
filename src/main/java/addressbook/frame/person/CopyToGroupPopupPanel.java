@@ -1,6 +1,6 @@
 package addressbook.frame.person;
 
-import addressbook.frame.AllCPersonPanel;
+import addressbook.frame.CPersonMainPanel;
 
 import addressbook.util.FileOperation;
 import com.dublbo.jpSwing.JpButton;
@@ -21,11 +21,11 @@ import java.util.List;
  */
 public class CopyToGroupPopupPanel extends JpPopupPanel implements ActionListener {
     public JpButton newGroupBtn = new JpButton("新建分组并复制");
-    public AllCPersonPanel ui; // 主窗口
-    public int[] selectedRows; // 选中行的行号
-    List<String> groupList;
+    public CPersonMainPanel ui;  // 主窗口
+    public int[] selectedRows;  // 选中行的行号
+    List<String> groupList;     // 联系组列表
 
-    public CopyToGroupPopupPanel(AllCPersonPanel ui, int[] selectedRows) {
+    public CopyToGroupPopupPanel(CPersonMainPanel ui, int[] selectedRows) {
         this.ui = ui;
         this.selectedRows = selectedRows;
         this.groupList = FileOperation.queryGroupTxtFile();
@@ -51,37 +51,27 @@ public class CopyToGroupPopupPanel extends JpPopupPanel implements ActionListene
         this.add(newGroupBtn, "30px");
         newGroupBtn.setBackground(Color.green);
         newGroupBtn.setOpaque(true);
-
-        newGroupBtn.addActionListener((e) -> {
-            // 新建分组
-            NewGroupDialog dlg = new NewGroupDialog();
-            String groupName = dlg.exec(ui);
-
-            // 复制联系人到改组
-            List<String> personNameList = new ArrayList<>();
-            // 获取选择的联系人的姓名
-            for (int i : selectedRows) {
-                String tmp = (String) this.ui.tableView.getValueAt(i, 1);
-                personNameList.add(tmp);
-            }
-            CopyToGroupTask task = new CopyToGroupTask(this.ui);
-            task.execute(personNameList, groupName);
-
-        });
+        newGroupBtn.addActionListener(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         JpButton btn = (JpButton) e.getSource();
-        System.out.println("你点击了：" + btn.getText());
-        List<String> personNameList = new ArrayList<>();
+        String groupName = btn.getText();
+        System.out.println("你点击了：" + groupName);
+
+        if(groupName.equals("新建分组并复制")){  // 若选择了 "新建分组并复制" ，则先新建分组
+            NewGroupDialog dlg = new NewGroupDialog();
+            groupName = dlg.exec(ui);
+        }
+
         // 获取选择的联系人的姓名
+        List<String> personNameList = new ArrayList<>();
         for (int i : selectedRows) {
             String tmp = (String) this.ui.tableView.getValueAt(i, 1);
             personNameList.add(tmp);
         }
         CopyToGroupTask task = new CopyToGroupTask(this.ui);
-        task.execute(personNameList, btn.getText());
-
+        task.execute(personNameList, groupName);
     }
 }

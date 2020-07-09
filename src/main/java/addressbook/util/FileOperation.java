@@ -118,18 +118,32 @@ public class FileOperation {
      * @return 联系人列表 List<ContactPerson>
      * @throws IOException 读取文件异常
      */
-    public static List<ContactPerson> queryCPersonTxtFile(String name) throws IOException {
+    public static List<ContactPerson> queryCPersonTxtFile(String name, int dataFlag) throws IOException {
         Vector<String> strVec = FileOperation.readTxtFile(Constant.ALL_PERSON_INFO_FILEPATH);
         List<ContactPerson> personList = new ArrayList<>();
 
-        for (String s : strVec) {
-            String tmp = s.split("\t")[Constant.PERSON_INFO.NAME.ordinal()];
-            if (tmp.contains(name)) {
-                ContactPerson person = new ContactPerson(s);
-                personList.add(person);
+        if(dataFlag == 1){  // 搜索全部联系人
+            for (String s : strVec) {
+                String tmp = s.split(Constant.FILE_SPLITTER)[Constant.PERSON_INFO.NAME.ordinal()];
+                if (tmp.contains(name)) {
+                    ContactPerson person = new ContactPerson(s);
+                    personList.add(person);
+                }
             }
         }
-
+        else if(dataFlag == 2){  // 搜索未分组的联系人
+            for (String s : strVec) {
+                String tmp1 = s.split(Constant.FILE_SPLITTER)[Constant.PERSON_INFO.NAME.ordinal()];
+                String tmp2 = s.split(Constant.FILE_SPLITTER)[Constant.PERSON_INFO.GROUP.ordinal()];
+                if (tmp2.equals(Constant.BLANK_REPLACE) && tmp1.contains(name)) {
+                    ContactPerson person = new ContactPerson(s);
+                    personList.add(person);
+                }
+            }
+        }
+        else{
+            System.out.println("=======queryCPersonTxtFile : dataFlag parameter error!");
+        }
         return personList;
     }
 

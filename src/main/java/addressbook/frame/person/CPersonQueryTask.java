@@ -1,7 +1,7 @@
 package addressbook.frame.person;
 
 import addressbook.entity.ContactPerson;
-import addressbook.frame.AllCPersonPanel;
+import addressbook.frame.CPersonMainPanel;
 import addressbook.util.FileOperation;
 
 import com.dublbo.jpSwing.JpToaster;
@@ -10,19 +10,20 @@ import com.dublbo.jpSwing.thread.JpShortTask;
 import java.util.List;
 
 public class CPersonQueryTask extends JpShortTask {
-    AllCPersonPanel ui;   // 主界面
+    CPersonMainPanel ui;   // 主界面
     List<ContactPerson> personList;  // 存放查询到的联系人列表
-    String filter;
 
-    public CPersonQueryTask(AllCPersonPanel ui) {
+
+    public CPersonQueryTask(CPersonMainPanel ui) {
         this.ui = ui;
     }
 
     @Override
     protected void doInBackground() throws Exception {
-        this.filter = (String) this.args[0];
+        String nameFilter = (String) this.args[0];
+        int dataFlag = (int) this.args[1];
         // 获取本次查询的总记录数
-        personList = FileOperation.queryCPersonTxtFile(filter);
+        personList = FileOperation.queryCPersonTxtFile(nameFilter, dataFlag);
         System.out.println("查询得到 " + personList.size() + " 条记录!");
     }
 

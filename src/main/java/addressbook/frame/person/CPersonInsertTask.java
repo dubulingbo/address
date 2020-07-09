@@ -1,17 +1,17 @@
 package addressbook.frame.person;
 
 import addressbook.entity.ContactPerson;
-import addressbook.frame.AllCPersonPanel;
+import addressbook.frame.CPersonMainPanel;
 import addressbook.util.FileOperation;
 import com.dublbo.jpSwing.JpToaster;
 import com.dublbo.jpSwing.thread.JpShortTask;
 
 public class CPersonInsertTask extends JpShortTask {
 
-    AllCPersonPanel ui;
+    CPersonMainPanel ui;
     ContactPerson person;
 
-    public CPersonInsertTask(AllCPersonPanel ui){ this.ui = ui; }
+    public CPersonInsertTask(CPersonMainPanel ui){ this.ui = ui; }
 
     @Override
     protected void doInBackground() throws Exception {

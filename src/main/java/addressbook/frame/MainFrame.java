@@ -2,6 +2,8 @@ package addressbook.frame;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
@@ -26,24 +28,29 @@ public class MainFrame extends JFrame {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int screenWidth = (int) screenSize.getWidth();
         int screenHeight = (int) screenSize.getHeight();
-
         int frameWidth = screenWidth * 3 / 4;  // 主页面的宽
         int frameHeight = screenHeight * 3 / 4;  // 主页面的高
 
-        this.setSize(frameWidth, frameHeight);
+        // 居中显示
+        this.setBounds((screenWidth - frameWidth) / 2, (screenHeight - frameHeight) / 2, frameWidth, frameHeight);
         this.setResizable(false);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setVisible(true);
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        this.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                int option = JOptionPane.showConfirmDialog(null, "确定要退出系统吗？", "退出系统", JOptionPane.YES_NO_OPTION);
+                if (option == JOptionPane.YES_OPTION) {
+                    System.exit(0);
+                }
+            }
+        });
 
         // 主页面的最底层容器
-        Container contentPane = this.getContentPane();
-        contentPane.add(initLeftMenu());
+        this.getContentPane().add(initLeftMenu());
     }
-
 
     private JComponent initLeftMenu() {
         left_menu = new JTabbedPane(JTabbedPane.LEFT);
-        left_menu.setFont(new Font("微软雅黑 Light", Font.BOLD, 16));
+        left_menu.setFont(new Font("微软雅黑 Light", Font.BOLD, 15));
         left_menu.setUI(new BasicTabbedPaneUI() {
             @Override
             protected int calculateTabHeight(int tabPlacement, int tabIndex, int fontHeight) {
@@ -80,13 +87,9 @@ public class MainFrame extends JFrame {
             int index = left_menu.getSelectedIndex();
             String title = left_menu.getTitleAt(left_menu.getSelectedIndex());
             System.out.println(index + "  " + title);
-            if (index == 1) {
-                left_menu.setComponentAt(index, new AllCPersonPanel());
+            if (index == 1 || index == 2) {
+                left_menu.setComponentAt(index, new CPersonMainPanel(index));
             }
-//                else if(index == 2){
-////					leftMenu_list.get(index-1).removeAll();
-//                    showXPerson();
-//                }
 //                else if(index >= 4)
 ////					leftMenu_list.get(index-2).removeAll();
 //                    showGroup(index - 2, title);

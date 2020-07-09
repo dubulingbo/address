@@ -10,55 +10,37 @@ import com.dublbo.jpSwing.layout.JpRowLayout;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * 所有联系人主面板类：主要显示导航栏和联系人列表
+ * @author Administrator
+ * create_time 2020/07/09
+ */
+public class CPersonMainPanel extends JPanel {
 
-public class AllCPersonPanel extends JPanel {
-    // 导航栏上的按钮
-    JpButton addButton = new JpButton("新建联系人");
-    JpButton copyToGroupButton = new JpButton("复制到组 ∨");
-    JpButton delButton = new JpButton("删除");
-    JpButton reloadButton = new JpButton("刷新");
-    JpEditText searchEdit = new JpEditText();
-    JpButton searchButton = new JpButton("查询");
+    public CPersonNavPanel navPanel = new CPersonNavPanel();  // 导航栏
+    public CPersonTableView tableView = new CPersonTableView();  // 用于显示数据的表格
+    int dataFlag;  // 取值为：{1,2}
 
-    // 用于显示数据的表格
-    public CPersonTableView tableView = new CPersonTableView();
+    public CPersonMainPanel(int dataFlag) {
+        this.dataFlag = dataFlag;
 
-    public AllCPersonPanel() {
         this.setLayout(new BorderLayout());
-        this.add(initTop(), BorderLayout.PAGE_START);
+
+        addNavPanelAction(); // 给导航栏中的组件添加监听事件
+        this.add(navPanel, BorderLayout.PAGE_START);
+
         this.add(initCenter(), BorderLayout.CENTER);
         this.add(initBottom(), BorderLayout.PAGE_END);
     }
 
-    private JComponent initTop() {
-        JpPanel panel = new JpPanel();
-        panel.setLayout(new JpRowLayout(5));
-        panel.padding(10);
-        panel.preferredHeight(50);
-        panel.setBgColor(Color.darkGray);
-
-        panel.add(addButton);
-        panel.add(delButton);
-        panel.add(copyToGroupButton);
-        panel.add(reloadButton);
-
-        panel.add(new JLabel(), "20px");
-        panel.add(searchEdit, "260px");
-        panel.add(searchButton, "auto");
-
-        addButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        delButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        copyToGroupButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        searchButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        searchEdit.setFont(new Font("微软雅黑", Font.PLAIN, 16));
-        searchEdit.setPlaceHolder(" 按姓名查找");
+    private void addNavPanelAction() {
 
         //给新建联系人按钮添加点击事件
-        addButton.addActionListener((e) -> onAdd());
+        this.navPanel.addButton.addActionListener((e) -> onAdd());
         // 给删除按钮添加点击事件
-        delButton.addActionListener((e) -> onDelete());
+        this.navPanel.delButton.addActionListener((e) -> onDelete());
         // 给复制到组按钮添加点击事件
-        copyToGroupButton.addActionListener((e) -> {
+        this.navPanel.copyToGroupButton.addActionListener((e) -> {
             int[] selectedRows = this.tableView.getSelectedRows();
             if (selectedRows != null && selectedRows.length > 0) {
                 JpButton btn = (JpButton) e.getSource();
@@ -69,17 +51,16 @@ public class AllCPersonPanel extends JPanel {
             }
         });
         // 给刷新按钮添加点击事件
-        reloadButton.addActionListener((e) -> onReload());
+        this.navPanel.reloadButton.addActionListener((e) -> onReload());
         // 监听搜索按钮事件
-        searchButton.addActionListener((e) -> {
-            if (("").equals(searchEdit.getText().trim())) {
+        this.navPanel.searchButton.addActionListener((e) -> {
+            if (("").equals(this.navPanel.searchEdit.getText().trim())) {
                 JpToaster.show(this, JpToaster.WARN, "请输入内容后搜索！");
                 return;
             }
             onQuery();
         });
 
-        return panel;
     }
 
     private JComponent initCenter() {
@@ -102,7 +83,7 @@ public class AllCPersonPanel extends JPanel {
                 return;
             }
             // 弹出右键菜单界面
-            CPersonInfoPopupPanel infoPanel = new CPersonInfoPopupPanel(AllCPersonPanel.this, person, row, evt.getX(), evt.getY());
+            CPersonInfoPopupPanel infoPanel = new CPersonInfoPopupPanel(CPersonMainPanel.this, person, row, evt.getX(), evt.getY());
             infoPanel.showPopup(view, evt.getX(), evt.getY());
         });
 
@@ -121,7 +102,7 @@ public class AllCPersonPanel extends JPanel {
     public void onReload() {
         this.tableView.clear();
         CPersonQueryTask task = new CPersonQueryTask(this);
-        task.execute(""); // 默认显示第 1 页
+        task.execute("", this.dataFlag);
     }
 
     private void onDelete() {
@@ -160,11 +141,11 @@ public class AllCPersonPanel extends JPanel {
     }
 
     private void onQuery() {
-        String filter = searchEdit.getText().trim();  // 获取过滤条件
+        String filter = this.navPanel.searchEdit.getText().trim();  // 获取过滤条件
         System.out.println("filter=" + filter);
-        this.tableView.clear(); // 清空联系人列表
+        this.tableView.clear();  // 清空联系人列表
 
         CPersonQueryTask task = new CPersonQueryTask(this);
-        task.execute(filter);
+        task.execute(filter, this.dataFlag);
     }
 }

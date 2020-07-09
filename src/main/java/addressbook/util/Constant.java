@@ -3,8 +3,6 @@ package addressbook.util;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.File;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * 系统常量类
@@ -13,7 +11,7 @@ import java.util.regex.Pattern;
 public class Constant {
     public static String FILE_SPLITTER = "\t"; // 文本文件中每行的分隔符
     public static String BLANK_REPLACE = "#";  // 空字段的替代字符串
-    public static String DEFAULT_AVATOR_PATH = "data/pdata/tx/xxx.png";
+    public static String DEFAULT_AVATAR_PATH = "data/pdata/tx/xxx.png";
 
     public static String ALL_PERSON_INFO_FILEPATH = "data/pdata/all_person_info.txt";
     public static String GROUP_INFO_FILEPATH = "data/gdata/group_info.txt";
@@ -52,7 +50,7 @@ public class Constant {
     {
         try {
             if(path == null || path.equals(""))
-                path = Constant.DEFAULT_AVATOR_PATH;
+                path = Constant.DEFAULT_AVATAR_PATH;
             return ImageIO.read(new File(path));
         }catch(Exception e)
         {

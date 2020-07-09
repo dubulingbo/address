@@ -1,17 +1,17 @@
 package addressbook.frame.person;
 
 import addressbook.entity.ContactPerson;
-import addressbook.frame.AllCPersonPanel;
+import addressbook.frame.CPersonMainPanel;
 import addressbook.util.FileOperation;
 import com.dublbo.jpSwing.JpToaster;
 import com.dublbo.jpSwing.thread.JpShortTask;
 
 public class CPersonUpdateTask extends JpShortTask {
-    AllCPersonPanel ui;
+    CPersonMainPanel ui;
     ContactPerson person;
     int row; //需要修改列表的行号
 
-    public CPersonUpdateTask(AllCPersonPanel ui) {
+    public CPersonUpdateTask(CPersonMainPanel ui) {
         this.ui = ui;
     }
 

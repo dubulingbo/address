@@ -1,15 +1,15 @@
 package addressbook.frame.person;
 
-import addressbook.frame.AllCPersonPanel;
+import addressbook.frame.CPersonMainPanel;
 import addressbook.util.FileOperation;
 import com.dublbo.jpSwing.JpToaster;
 import com.dublbo.jpSwing.thread.JpShortTask;
 
 public class CPersonDeleteTask extends JpShortTask {
-    AllCPersonPanel ui;
+    CPersonMainPanel ui;
     int[] rowIndexs;
 
-    public CPersonDeleteTask(AllCPersonPanel ui) {
+    public CPersonDeleteTask(CPersonMainPanel ui) {
         this.ui = ui;
     }
 

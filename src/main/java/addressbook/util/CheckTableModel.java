@@ -6,7 +6,7 @@ public class CheckTableModel extends DefaultTableModel {
 
     // * 根据类型返回显示空间
     // * 布尔类型返回显示checkbox
-    public Class getColumnClass(int c) {
+    public Class<?> getColumnClass(int c) {
         return getValueAt(0, c).getClass();
     }
 
