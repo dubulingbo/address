@@ -6,4 +6,4 @@
 2. **联系组管理**
 
 ## 运行结果
-![image text](https://github.com/dubulingbo/addressbook/blob/master/data/images/001.jpg)
+![image text]( /data/pdata/tx/001.jpg )
