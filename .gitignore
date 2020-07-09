@@ -1,6 +1,7 @@
 # maven ignore
 target/
 *.jar
+!Jp-Swing*.jar
 !.mvn/wrapper/*
 *.war
 *.zip
