@@ -4,6 +4,3 @@
 ## 主要功能
 1. **联系人管理**：分为所有联系人，未分组联系人
 2. **联系组管理**
-
-## 运行结果
-![image text](https://github.com/dubulingbo/addressbook/raw/master/data/pdata/tx/001.jpg )
