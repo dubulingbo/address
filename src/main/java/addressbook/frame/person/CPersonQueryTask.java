@@ -21,9 +21,9 @@ public class CPersonQueryTask extends JpShortTask {
     @Override
     protected void doInBackground() throws Exception {
         String nameFilter = (String) this.args[0];
-        int dataFlag = (int) this.args[1];
+        String groupFilter = (String) this.args[1];
         // 获取本次查询的总记录数
-        personList = FileOperation.queryCPersonTxtFile(nameFilter, dataFlag);
+        personList = FileOperation.queryCPersonTxtFile(nameFilter, groupFilter);
         System.out.println("查询得到 " + personList.size() + " 条记录!");
     }
 

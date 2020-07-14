@@ -1,9 +1,13 @@
 package addressbook.frame;
 
+import addressbook.util.Constant;
+import addressbook.util.FileOperation;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
 
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
@@ -67,32 +71,33 @@ public class MainFrame extends JFrame {
         left_menu.add("所有联系人", null);
         left_menu.add("未分组联系人", null);
         left_menu.addTab("联系组管理", null);
-        left_menu.setEnabledAt(0, false);
-        left_menu.setEnabledAt(3, false);
 
         // 添加 联系组 分组
-        // 这里只需要将内存中groupInfoData加载到面板上即可,因为这里的数据始终与文件中的数据保持同步
-//        for (String groupInfo : groupInfoData) {
-//            JPanel jPanel = new JPanel();
-//            jPanel.setLayout(new BorderLayout());
-//            jPanel.setBackground(Color.WHITE);
-//            String tmpString = groupInfo.split(Constant.FILE_SPLITTER)[1];
-//            if (!tmpString.isEmpty()) {
-//                left_menu.add(tmpString, jPanel);
-//                leftMenu_list.addElement(jPanel);
-//            }
-//        }
+        List<String> groupList = FileOperation.queryGroupTxtFile();
+        for (String g : groupList) {
+            left_menu.addTab(g, null);
+        }
+
+        left_menu.setEnabledAt(0, false);
+        left_menu.setEnabledAt(3, false);
 
         left_menu.addChangeListener(e -> {
             int index = left_menu.getSelectedIndex();
             String title = left_menu.getTitleAt(left_menu.getSelectedIndex());
             System.out.println(index + "  " + title);
-            if (index == 1 || index == 2) {
-                left_menu.setComponentAt(index, new CPersonMainPanel(index));
+            String groupFilter;
+            if (index < 1 || index ==3){
+                System.out.println("JTabbedPane ==> 选择无效");
+            }else{
+                if (index == 1) {
+                    groupFilter = "";  // 所有联系人
+                } else if(index == 2){
+                    groupFilter = Constant.BLANK_REPLACE; // 无分组联系人
+                } else {
+                    groupFilter = title;
+                }
+                left_menu.setComponentAt(index, new CPersonMainPanel(groupFilter, this.left_menu));
             }
-//                else if(index >= 4)
-////					leftMenu_list.get(index-2).removeAll();
-//                    showGroup(index - 2, title);
         });
         return left_menu;
     }

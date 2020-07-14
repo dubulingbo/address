@@ -18,7 +18,7 @@ public class CPersonInsertTask extends JpShortTask {
         this.person = (ContactPerson) this.args[0]; // 在execute方法中传入的参数
 
         FileOperation.insertCPersonTxtFileRow(person);
-        System.out.println("已添加一条记录！");
+        System.out.println("已添加联系人一条记录！");
 
     }
 

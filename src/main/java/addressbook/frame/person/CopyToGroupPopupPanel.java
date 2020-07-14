@@ -60,9 +60,12 @@ public class CopyToGroupPopupPanel extends JpPopupPanel implements ActionListene
         String groupName = btn.getText();
         System.out.println("你点击了：" + groupName);
 
+        // 隐藏下拉框
+        this.hidePopup();
+
         if(groupName.equals("新建分组并复制")){  // 若选择了 "新建分组并复制" ，则先新建分组
-            NewGroupDialog dlg = new NewGroupDialog();
-            groupName = dlg.exec(ui);
+            NewGroupDialog dlg = new NewGroupDialog(this.ui);
+            groupName = dlg.exec();
         }
 
         // 获取选择的联系人的姓名

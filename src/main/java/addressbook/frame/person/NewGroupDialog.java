@@ -1,6 +1,7 @@
 package addressbook.frame.person;
 
 import addressbook.frame.CPersonMainPanel;
+import addressbook.frame.group.GroupInsertTask;
 import addressbook.util.FileOperation;
 import com.dublbo.jpSwing.JpButton;
 import com.dublbo.jpSwing.JpEditText;
@@ -12,13 +13,15 @@ import javax.swing.*;
 import java.awt.*;
 
 public class NewGroupDialog extends JDialog {
+    private CPersonMainPanel ui;
     String groupName;
     JpEditText groupField = new JpEditText();
 
     JpButton okBtn = new JpButton("确定");
     JpButton cancelBtn = new JpButton("取消");
 
-    public NewGroupDialog() {
+    public NewGroupDialog(CPersonMainPanel ui) {
+        this.ui = ui;
         this.setModal(true);
         this.setSize(400, 80);
         this.setUndecorated(true);
@@ -68,6 +71,8 @@ public class NewGroupDialog extends JDialog {
                 if (FileOperation.groupIsExist(t)) {
                     JpToaster.show(this, JpToaster.WARN, "该分组已存在，请输入其他名称！");
                 }else{
+                    GroupInsertTask task = new GroupInsertTask(this.ui);
+                    task.execute(t);
                     this.groupName = t;  // 写入文件
                     this.setVisible(false);
                 }
@@ -82,7 +87,7 @@ public class NewGroupDialog extends JDialog {
         return panel;
     }
 
-    public String exec(CPersonMainPanel ui) {
+    public String exec() {
         // 相对owner居中显示
         Rectangle frmRect = ui.getBounds();
         int width = this.getWidth();

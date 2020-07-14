@@ -19,10 +19,12 @@ public class CPersonMainPanel extends JPanel {
 
     public CPersonNavPanel navPanel = new CPersonNavPanel();  // 导航栏
     public CPersonTableView tableView = new CPersonTableView();  // 用于显示数据的表格
-    int dataFlag;  // 取值为：{1,2}
+    String groupFilter;  // 所属组过滤
+    public JTabbedPane left_menu; // 左边菜单栏，有时候可能会需要修改
 
-    public CPersonMainPanel(int dataFlag) {
-        this.dataFlag = dataFlag;
+    public CPersonMainPanel(String groupFilter, JTabbedPane left_menu) {
+        this.groupFilter = groupFilter;
+        this.left_menu = left_menu;
 
         this.setLayout(new BorderLayout());
 
@@ -102,20 +104,20 @@ public class CPersonMainPanel extends JPanel {
     public void onReload() {
         this.tableView.clear();
         CPersonQueryTask task = new CPersonQueryTask(this);
-        task.execute("", this.dataFlag);
+        task.execute("", this.groupFilter);
     }
 
     private void onDelete() {
-        int[] rowIndexs = this.tableView.getSelectedRows();
-        if (rowIndexs == null || rowIndexs.length <= 0) {
+        int[] rowIndexes = this.tableView.getSelectedRows();
+        if (rowIndexes == null || rowIndexes.length <= 0) {
             JpToaster.show(this, JpToaster.WARN, "请选择要删除的联系人！");
             return;
         }
 
-        String[] keys = new String[rowIndexs.length];
-        for (int i = 0; i < rowIndexs.length; i++) {
+        String[] keys = new String[rowIndexes.length];
+        for (int i = 0; i < rowIndexes.length; i++) {
             // 获取 姓名
-            keys[i] = this.tableView.getValueAt(rowIndexs[i], 1).toString();
+            keys[i] = this.tableView.getValueAt(rowIndexes[i], 1).toString();
         }
 
         int result = JOptionPane.showConfirmDialog(  // 是：0 否：1 取消：-1
@@ -127,7 +129,7 @@ public class CPersonMainPanel extends JPanel {
 
         if (result == 0) { // 选择 “是”
             CPersonDeleteTask task = new CPersonDeleteTask(this);
-            task.execute(rowIndexs, keys);
+            task.execute(rowIndexes, keys);
         }
     }
 
@@ -146,6 +148,6 @@ public class CPersonMainPanel extends JPanel {
         this.tableView.clear();  // 清空联系人列表
 
         CPersonQueryTask task = new CPersonQueryTask(this);
-        task.execute(filter, this.dataFlag);
+        task.execute(filter, this.groupFilter);
     }
 }

@@ -1,6 +1,7 @@
 package addressbook.util;
 
 import addressbook.entity.ContactPerson;
+import com.sun.xml.internal.fastinfoset.util.StringArray;
 
 import java.io.*;
 import java.util.*;
@@ -118,31 +119,33 @@ public class FileOperation {
      * @return 联系人列表 List<ContactPerson>
      * @throws IOException 读取文件异常
      */
-    public static List<ContactPerson> queryCPersonTxtFile(String name, int dataFlag) throws IOException {
+    public static List<ContactPerson> queryCPersonTxtFile(String name, String groupFilter) throws IOException {
         Vector<String> strVec = FileOperation.readTxtFile(Constant.ALL_PERSON_INFO_FILEPATH);
         List<ContactPerson> personList = new ArrayList<>();
-
-        if(dataFlag == 1){  // 搜索全部联系人
-            for (String s : strVec) {
+        if(groupFilter.equals("")){  // 所有联系人
+            for (String s : strVec){
                 String tmp = s.split(Constant.FILE_SPLITTER)[Constant.PERSON_INFO.NAME.ordinal()];
-                if (tmp.contains(name)) {
+                if(tmp.contains(name)){
                     ContactPerson person = new ContactPerson(s);
                     personList.add(person);
                 }
             }
-        }
-        else if(dataFlag == 2){  // 搜索未分组的联系人
+        } else {
             for (String s : strVec) {
                 String tmp1 = s.split(Constant.FILE_SPLITTER)[Constant.PERSON_INFO.NAME.ordinal()];
-                String tmp2 = s.split(Constant.FILE_SPLITTER)[Constant.PERSON_INFO.GROUP.ordinal()];
-                if (tmp2.equals(Constant.BLANK_REPLACE) && tmp1.contains(name)) {
+                String[] tmpArr = s.split(Constant.FILE_SPLITTER)[Constant.PERSON_INFO.GROUP.ordinal()].split(", ");
+                boolean flag = false; // 标记是否包含当前分组
+                for(String tmp : tmpArr){
+                    if(tmp.equals(groupFilter)){
+                        flag = true;
+                        break;
+                    }
+                }
+                if (flag && tmp1.contains(name)) {
                     ContactPerson person = new ContactPerson(s);
                     personList.add(person);
                 }
             }
-        }
-        else{
-            System.out.println("=======queryCPersonTxtFile : dataFlag parameter error!");
         }
         return personList;
     }
@@ -152,9 +155,7 @@ public class FileOperation {
         List<String> res = new ArrayList<>();
         try {
             Vector<String> strVec = FileOperation.readTxtFile(Constant.GROUP_INFO_FILEPATH);
-            for (String s : strVec) {
-                res.add(s);
-            }
+            res.addAll(strVec);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -253,5 +254,14 @@ public class FileOperation {
             e.printStackTrace();
         }
         return false;
+    }
+
+    // 插入联系组文件 一行数据
+    public static void insertGroupTxtFileRow(String groupName) throws IOException {
+        // 先读取文件，再将改变后的内容写入文件
+        Vector<String> strVec = FileOperation.readTxtFile(Constant.GROUP_INFO_FILEPATH);
+        // 在最后一行插入数据
+        strVec.add(groupName);
+        FileOperation.writeTxtFile(Constant.GROUP_INFO_FILEPATH, strVec);
     }
 }
